@@ -17,7 +17,7 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[])
 {
     int i;
     char* str[100];
-
+    std::string fileName = "C:\\Users\\yryas\\OneDrive\\Desktop\\Hessian SIM\\Hessian SIM\\raw-data\\Actin_97hz_7ms exposure raw data.tif";
     /* Check for proper number of input and output arguments */
     if (nrhs < 2) {
         mexErrMsgIdAndTxt("MATLAB:mxcreatecharmatrixfromstr:minrhs",
@@ -34,7 +34,7 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[])
     std::vector<cv::Mat> img;
     
     // Read the mulit framed imaged into a  vector of cv::Mat
-    imreadmulti("C:\\Users\\yryas\\OneDrive\\Desktop\\Hessian SIM\\Hessian SIM\\raw-data\\Actin_97hz_7ms exposure raw data.tif", img, cv::IMREAD_UNCHANGED);
+    imreadmulti(fileName, img, cv::IMREAD_UNCHANGED);
 
     int width = img[0].cols;
     int height = img[0].rows;
