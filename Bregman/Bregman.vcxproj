@@ -130,6 +130,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bregman.cpp" />
+    <ClCompile Include="fftn.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="fftn.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\matlab.targets" />

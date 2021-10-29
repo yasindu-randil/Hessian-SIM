@@ -6,6 +6,7 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/opencv.hpp"
 #include <iostream>
+#include "fftn.h"
 
 // Helper functions
 cv::Mat forwardDifferenciation(cv::Mat img);
@@ -88,16 +89,23 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[])
     for (int i = 0; i < numberofFrames; i++) {
         img[i] = img[i] / yMax;
     }
- 
+    cv::Ptr<cv::Formatter> fmt = cv::Formatter::get(cv::Formatter::FMT_MATLAB );
+    fmt->set64fPrecision(4);
+    fmt->set32fPrecision(4);
+    fmt->format(img[179]);
     int sizeX[] = { width, height, numberofFrames };
-    cv::Mat x = cv::Mat::zeros(3, sizeX, CV_32FC1);
-    std::cout << " " << type2str(img[179].type()) << " Mat img  = " << " Width: " << width << " height: " << height << " Frames: " << img.size() << std::endl;
-   
+    /*  cv::Mat x = cv::Mat::zeros(3, sizeX, CV_32FC1);*/
+    
+    cv::imwritemulti("C:\\Users\\yryas\\OneDrive\\Desktop\\opencvImg.tiff", img);
     // *********************************** Start Point *************************************
 
 
-    //// ***************************** FFT of difference operator ****************************
+    // ***************************** FFT of difference operator ****************************
 
+    fftn obj;
+    //cv::Mat testFFT = obj.fftN(img[179]);
+    cv::imwrite("C:\\Users\\yryas\\OneDrive\\Desktop\\opencvImg.tiff", img[179]);
+    std::cout << img[179] << type2str(img[179].type()) << " Mat img  = " << " Width: " << width << " height: " << height << " Frames: " << img.size() << std::endl;
     //// *********************************** Iteration ***************************************
     //
     //// *********************************** Renew *******************************************
