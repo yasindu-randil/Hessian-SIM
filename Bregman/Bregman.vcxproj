@@ -131,9 +131,11 @@
   <ItemGroup>
     <ClCompile Include="Bregman.cpp" />
     <ClCompile Include="fftn.cpp" />
+    <ClCompile Include="forwardDiff.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fftn.h" />
+    <ClInclude Include="forwardDiff.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\matlab.targets" />

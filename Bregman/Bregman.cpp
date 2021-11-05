@@ -7,7 +7,8 @@
 #include "opencv2/opencv.hpp"
 #include <iostream>
 #include "fftn.h"
-
+#include <math.h>
+#include "forwardDiff.h"
 // Helper functions
 cv::Mat forwardDifferenciation(cv::Mat img);
 
@@ -33,10 +34,10 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[])
 
 
     std::vector<cv::Mat> img;
-    
+    std::vector<cv::Mat> frac;
     // Read the mulit framed imaged into a  vector of cv::Mat
     imreadmulti(fileName, img, cv::IMREAD_UNCHANGED);
-
+    imreadmulti(fileName, frac, cv::IMREAD_UNCHANGED);
     int width = img[0].cols;
     int height = img[0].rows;
     int numberofFrames = img.size();
@@ -44,6 +45,7 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[])
     // Convert to CV_32FC1 from CV_16U
     for (int i = 0; i < numberofFrames; i++) {
         img[i].convertTo(img[i], CV_32FC1);
+        frac[i].convertTo(frac[i], CV_32FC1);
     }
 
     //cv::namedWindow("Hessian-SIM", cv::WINDOW_AUTOSIZE);
@@ -88,26 +90,38 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[])
 
     for (int i = 0; i < numberofFrames; i++) {
         img[i] = img[i] / yMax;
+        frac[i] = frac[i] / yMax;
     }
-    cv::Ptr<cv::Formatter> fmt = cv::Formatter::get(cv::Formatter::FMT_MATLAB );
-    fmt->set64fPrecision(4);
-    fmt->set32fPrecision(4);
-    fmt->format(img[179]);
+    //cv::Ptr<cv::Formatter> fmt = cv::Formatter::get(cv::Formatter::FMT_C);
+    //fmt->set64fPrecision(4);
+    //fmt->set32fPrecision(2);
+    //fmt->format(img[179]);
     int sizeX[] = { width, height, numberofFrames };
     /*  cv::Mat x = cv::Mat::zeros(3, sizeX, CV_32FC1);*/
-    
-    cv::imwritemulti("C:\\Users\\yryas\\OneDrive\\Desktop\\opencvImg.tiff", img);
+    for (int i = 0; i < numberofFrames; i++) {
+        for (int j = 0; j < height; j++) {
+            for (int k = 0; k < width; k++) {
+                //img[i].at<float>(j, k) = 0.1;
+                //roundf(img[179].at<float>(127, 255) * 1000) / 1000;
+            }
+        }
+    }
+
     // *********************************** Start Point *************************************
 
 
     // ***************************** FFT of difference operator ****************************
 
-    fftn obj;
-    //cv::Mat testFFT = obj.fftN(img[179]);
-    cv::imwrite("C:\\Users\\yryas\\OneDrive\\Desktop\\opencvImg.tiff", img[179]);
-    std::cout << img[179] << type2str(img[179].type()) << " Mat img  = " << " Width: " << width << " height: " << height << " Frames: " << img.size() << std::endl;
+    cv::dft(img[179], img[179], cv::DFT_COMPLEX_OUTPUT );
+    std::cout << img[179] << type2str(img[179].type()) << " *Mat img  = " << " Width: " << width << " height: " << height << " Frames: " << img.size() << std::endl;
     //// *********************************** Iteration ***************************************
-    //
+    
+    for (int i = 0; i < numberofFrames; i++) {
+        frac[i] = img[i] * ( siranu/ lamda);
+        forwardDiff obj;
+        obj.forwardDiffFunction( img[i], numberofFrames);
+    }
+
     //// *********************************** Renew *******************************************
 
     //// ************************ calculate the dirivative of x **********************************
